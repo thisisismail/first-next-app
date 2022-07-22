@@ -17,12 +17,16 @@ export default function blog(props) {
 
 // generating js file in server side, html will be generate later as it is requested by client
 // it is suitable for API with dynamic data
-export async function getServerSideProps() {
-  const data = await fetch("https://gorest.co.in/public/v2/posts");
-  const jsonData = await data.json();
+export const getServerSideProps = async () => {
+  const data = await fetch("https://gorest.co.in/public/v2/posts").then(
+    (res) => {
+      return res.json();
+    }
+  );
+  const jsonData = data;
   return {
     props: {
       jsonData,
     },
   };
-}
+};
