@@ -32,7 +32,10 @@
       "react/jsx-props-no-spreading": "off",
       "comma-dangle": "off",
       "implicit-arrow-linebreak": "off",
-      "function-paren-newline": "off"
+      "function-paren-newline": "off",
+      "object-curly-newline": "off",
+      "react-hooks/rules-of-hooks": "off",
+      "react/jsx-wrap-multilines": "off"
 
 
     //   "react/prop-types": [<enabled>, { ignore: <ignore>, customValidators: <customValidator>, skipUndeclared: <skipUndeclared> }]

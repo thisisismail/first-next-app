@@ -1,71 +1,101 @@
-import { Card, CardBody, CardFooter } from "@material-tailwind/react";
-import { GoComment } from "react-icons/go";
+import React, { useState } from "react";
+import { Button } from "@material-tailwind/react";
+import { GrClose } from "react-icons/gr";
 import Layout from "../components/layout/index";
+import CardPost from "../components/CardPost/index";
+import PopUpPost from "../components/PopUpPost/index";
 
 export default function posts({ dataPosts, dataUsers, dataComments }) {
+  const [popUp, setPopUp] = useState();
+
   if (!dataPosts) {
     return null;
   }
 
   console.log(dataPosts);
   console.log(dataUsers);
+  console.log(dataComments);
 
   const postsList = dataPosts?.map((item) => {
     const userId = item.user_id;
     const postId = item.id;
+
     const userInfo = dataUsers?.find((user) => {
       return user.id === userId;
     });
+
     const commentInfo = dataComments?.find((comment) => {
-      return comment.find((nComment) => {
-        return nComment.post_id === postId;
+      return comment.find((nestedComment) => {
+        return nestedComment.post_id === postId;
       });
     });
-    // console.log(dataComments);
-    // console.log("S =======================");
-    // console.log(commentInfo);
-    // console.log("F =======================");
+
     const comments = commentInfo?.map((comment) => {
       return (
-        <div key={comment.email} className="mt-2">
+        <div key={comment.email} className="mt-4">
           <h1 className="font-bold">{comment.name}</h1>
-          <h1>{comment.body}</h1>
+          <h1 className="border-0 line-clamp-1 text-xs">{comment.email}</h1>
+          <h1 className="text-md">{comment.body}</h1>
         </div>
       );
     });
-    // console.log(dataComments);
+
+    const sayGoodbye = () => {
+      console.log("clicked");
+      setPopUp();
+    };
+
+    const sayHello = (title, body) => {
+      console.log("clicked");
+      setPopUp(
+        <PopUpPost
+          postComments={comments}
+          postUser={userInfo?.name}
+          postEmail={userInfo?.email}
+          postTitle={title}
+          postBody={body}
+          closeButton={
+            <Button
+              onClick={sayGoodbye}
+              className="h-full bg-transparent shadow-none drop-shadow-none hover:drop-shadow-none hover:shadow-none"
+            >
+              <GrClose size={24} />
+            </Button>
+          }
+        />
+      );
+    };
 
     return (
-      <Card
+      <div
         key={item.id}
-        style={{ width: 300 }}
-        className="border-0 rounded-xl w-full flex flex-col justify-center"
+        style={{ width: 400 }}
+        onClick={() => sayHello(item.title, item.body)}
+        className="cursor-pointer"
       >
-        <CardBody className="gap-3 flex flex-col">
-          <h1 className="font-bold text-2xl line-clamp-2 overflow-hidden">
-            {item.title}
-          </h1>
-          <h6 className="overflow-hidden line-clamp-2 text-md">{item.body}</h6>
-        </CardBody>
-        <CardFooter divider className="flex justify-between items-center">
-          <h1 className="border-0">{userInfo?.name}</h1>
-          <div className="border-0">
-            <GoComment size={24} className=" w-full text-black" />
-          </div>
-        </CardFooter>
-        <div>Comments</div>
-        <div>{comments}</div>
-        {/* <div>{comments}</div> */}
-      </Card>
+        <CardPost
+          postTitle={item.title}
+          postBody={item.body}
+          postUser={userInfo?.name}
+          postEmail={userInfo?.email}
+        />
+      </div>
     );
   });
+
+  // const renderFramePlayer = () => {
+  //   return <div>{playedVideo !== "" ? <PopUpPost /> : null}</div>;
+  // };
 
   return (
     <Layout>
       <div>Posts</div>
+      {/* {renderFramePlayer()} */}
+      {/* {renderPopUp()} */}
+      {popUp}
       <div
         className="border-0 gap-4 flex flex-wrap justify-center mx-auto px-4"
-        style={{ maxWidth: 1200 }}
+        style={{ maxWidth: 1400 }}
       >
         {postsList}
       </div>

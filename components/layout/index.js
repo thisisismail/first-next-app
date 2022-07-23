@@ -6,7 +6,7 @@ export default function index(props) {
   return (
     <div className="flex flex-col border-0 h-screen border-black w-full">
       <HeaderSection />
-      <div className="h-full bg-grey-50">{children}</div>
+      <div className=" bg-grey-100">{children}</div>
       <FooterSection />
     </div>
   );
